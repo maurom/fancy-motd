@@ -66,6 +66,18 @@ print_uptime() {
 }
 
 
+# check for required binaries
+ensure_binaries() {
+    REQUIRED_BINARIES="df figlet lsb_release openssl sensors systemctl"
+    for BINARY in $REQUIRED_BINARIES; do
+        if ! which "$BINARY" 2> /dev/null 1>&2; then
+            echo "Error: $BINARY command not found"
+            exit 72   # EX_OSFILE
+        fi
+    done
+}
+
+
 # main function and entrypoint of this script
 # it runs the different functions from the modules
 # and prints a newline in order to seperate the
@@ -95,6 +107,8 @@ main() {
 
 # fail fast
 set -eo pipefail
+
+ensure_binaries
 
 # execute the main function with commandline arguments
 main "$@"
