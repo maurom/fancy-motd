@@ -24,7 +24,9 @@ source modules/updates.bash
 # displayed with the systemd-service-module
 SERVICES=(
     "NetworkManager"
-    "firewalld"
+    "apache2"
+    "postgresql"
+#    "firewalld"
 )
 
 # configure which filesystems
@@ -39,8 +41,8 @@ FILESYSTEMS=(
 # the ssl module should display
 # the expiration of the Certificate
 DOMAINS=(
-    "domain.com"
-    "example.com"
+    "maurom.com"
+#    "example.com"
 )
 
 
@@ -55,8 +57,8 @@ USERS=(
 # configure which containers should
 # be checked in the docker-module
 CONTAINER=(
-    "sql"
-    "sf.app"
+#     "sql"
+#     "sf.app"
 )
 
 
