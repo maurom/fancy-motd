@@ -22,10 +22,23 @@ print_ssl_expire_date() {
     # iterate through all domains configured in
     # DOMAINS-array
     for domain in ${DOMAINS[@]}; do
+
+        # use proxy environment variable, if defined
+        local OPTIONAL_PROXY=""
+        if [[ "$no_proxy" != *"$domain"* ]] && [[ "$NO_PROXY" != *"$domain"* ]]; then
+            if [ -n "$https_proxy" ]; then
+                OPTIONAL_PROXY="${https_proxy/http:\/\//}"
+                OPTIONAL_PROXY="-proxy ${OPTIONAL_PROXY/\//}"
+            elif [ -n "$HTTPS_PROXY" ]; then
+                OPTIONAL_PROXY="${HTTPS_PROXY/http:\/\//}"
+                OPTIONAL_PROXY="-proxy ${OPTIONAL_PROXY/\//}"
+            fi
+        fi
+
         # get the expiration date from the domain certificates
         # with openssl
         local expire_date=$(
-            openssl s_client \
+            openssl s_client $OPTIONAL_PROXY \
                 -connect "$domain:443" \
                 -servername "$domain" \
                 < /dev/null 2>/dev/null \
