@@ -99,7 +99,7 @@ main() {
     printf "\n"
     print_ssl_expire_date
     printf "\n"
-    print_updates_arch
+    print_updates
     printf "\n"
     print_last_login
 }

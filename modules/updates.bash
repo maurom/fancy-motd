@@ -53,3 +53,25 @@ print_updates_debian() {
         printf "  No updates available\n"
     fi
 }
+
+
+# print packages that needs an update
+# using each distribution's package manager
+print_updates() {
+    # TODO: except Debian's, these checks are bogus;
+    #       please update them accordingly
+
+    # check using standard files
+    test -x /etc/debian_version && print_updates_debian
+    test -x /etc/ubuntu_version && print_updates_debian
+    test -x /etc/arch_version && print_updates_arch
+    return   # skip next checks
+
+    # check using lsb_release
+    local vendor = $( lsb_release -i | cur -d: )
+    case "$vendor" in
+    Debian) print_updates_debian ;;
+    Ubuntu) print_updates_debian ;;
+    Arch) print_updates_arch ;;
+    esac
+}
