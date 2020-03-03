@@ -6,13 +6,14 @@
 # by /r/unixporn
 #
 # (c) 2018 Daniel Jankowski
+# (c) 2020 Mauro A. Meloni
 
 
 # import the utils module
 source modules/utils.bash
 
 
-# print packages that needs and update for
+# print packages that need to be updated for
 # arch based systems with pacman
 print_updates_arch() {
     # get the update count with counting lines of the
@@ -26,6 +27,27 @@ print_updates_arch() {
     if [[ "$update_count" != 0 ]]; then
         # print and indented list of the updates
         print_indented pacman -Qu
+    else
+        # if there are not updates, print it either
+        printf "  No updates available\n"
+    fi
+}
+
+
+# print packages that need to be updated for
+# debian based systems with apt
+print_updates_debian() {
+    # get the update count with counting lines of the
+    # packages that needs updtes from pacman
+    local update_count=$( apt list --upgradable 2>/dev/null | tail -n "+2" | wc -l )
+
+    # print the module headline
+    printf "Debian/Ubuntu Updates\n"
+
+    # if there are updates
+    if [[ "$update_count" != 0 ]]; then
+        # print and indented list of the updates
+        print_indented apt list --upgradable 2>/dev/null | tail -n "+2"
     else
         # if there are not updates, print it either
         printf "  No updates available\n"
